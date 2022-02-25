@@ -1,25 +1,29 @@
 def read(sequence):
     for c in sequence:
+        if c is not '5ACGT3':
+            return error
+    for c in sequence:
         if c == '5':
             x = sequence.index(c)
             for i in sequence:
                 if i == '3':
                     y = sequence.index(i)
-                    print(sequence[x:y + 2])
+                    originalseq = (sequence[x:y + 2])
+                    print(originalseq)
 
 def complementary(sequence):
     read(sequence)
     bckwrdseq = sequence[::-1]
     for i in bckwrdseq:
         if i == '3':
-            print("5' ",end="")
+            complementaryseq = print("5' ",end="")
         elif i =='5':
-            print(" " + "3' ")
+            complementaryseq = print(" " + "3' ")
         elif i == 'T':
-            print('A',end="")
+            complementaryseq = print('A',end="")
         elif i == 'A':
-            print('T',end="")
+            complementaryseq = print('T',end="")
         elif i == 'G':
-            print('C',end="")
+            complementaryseq = print('C',end="")
         elif i == 'C':
-            print('G',end="")
+            complementaryseq = print('G',end="")
