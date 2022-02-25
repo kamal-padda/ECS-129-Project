@@ -1,29 +1,46 @@
 def read(sequence):
-    for c in sequence:
-        if c is not '5ACGT3':
-            return error
-    for c in sequence:
-        if c == '5':
-            x = sequence.index(c)
-            for i in sequence:
-                if i == '3':
-                    y = sequence.index(i)
-                    originalseq = (sequence[x:y + 2])
-                    print(originalseq)
+    flag = True
+    while flag:
+        try:
+            for c in sequence:
+                if c is not '5ACGT3':
+                    return ValueError
+                else:
+                    flag = False
+        except ValueError:
+            print("There was an error in the protein sequence, please try again. \n")
+
+    if c == '5':
+        x = sequence.index(c)
+    for i in sequence:
+        if i == '3':
+            y = sequence.index(i)
+            originalseq = (sequence[x:y + 2])
+            print(originalseq)
+
+                
+        
 
 def complementary(sequence):
     read(sequence)
     bckwrdseq = sequence[::-1]
+    complementaryseq = ""
     for i in bckwrdseq:
         if i == '3':
-            complementaryseq = print("5' ",end="")
+            complementaryseq.append("5'")
         elif i =='5':
-            complementaryseq = print(" " + "3' ")
+            complementaryseq.append("3' ")
         elif i == 'T':
-            complementaryseq = print('A',end="")
+            complementaryseq.append('A')
         elif i == 'A':
-            complementaryseq = print('T',end="")
+            complementaryseq.append('T')
         elif i == 'G':
-            complementaryseq = print('C',end="")
+            complementaryseq.append('C')
         elif i == 'C':
-            complementaryseq = print('G',end="")
+            complementaryseq.append('G')
+        print(complementaryseq)
+
+
+read("5’ TCAATGTAACGCGCTACCCGGAGCTCTGGGCCCAAATTTCATCCACT 3’")
+complementary("5’ TCAATGTAACGCGCTACCCGGAGCTCTGGGCCCAAATTTCATCCACT 3’")
+
