@@ -1,25 +1,60 @@
-def read(sequence):
-    for c in sequence:
-        if c == '5':
-            x = sequence.index(c)
-            for i in sequence:
-                if i == '3':
-                    y = sequence.index(i)
-                    print(sequence[x:y + 2])
+# Transcribes gene into mRNA
+gene = input("Enter an example gene: ")
+gene = gene.upper()
+listHolder = list(gene)
+mRNA = []
+for i in listHolder:
+    newCode = i.replace("T", "U")
+    mRNA.append(newCode)
+mrnaSequence = "".join(mRNA)
+print("mRNA transcribed from gene: " + mrnaSequence)
 
-def complementary(sequence):
-    read(sequence)
-    bckwrdseq = sequence[::-1]
-    for i in bckwrdseq:
-        if i == '3':
-            print("5' ",end="")
-        elif i =='5':
-            print(" " + "3' ")
-        elif i == 'T':
-            print('A',end="")
-        elif i == 'A':
-            print('T',end="")
-        elif i == 'G':
-            print('C',end="")
-        elif i == 'C':
-            print('G',end="")
+# Translate mRNA into AA sequence
+aaSequence = []
+codonList = [mrnaSequence[i:i+3] for i in range(0,len(mrnaSequence),3)]
+for i in codonList:
+    if i == "AUG":
+        aaSequence.append("M")
+    elif i == "UUU" or i == "UUC":
+        aaSequence.append("F")
+    elif i == "UUA" or i == "UUG" or i == "CUU" or i == "CUC" or i == "CUA" or i == "CUG":
+        aaSequence.append("L")
+    elif i == "GUU" or i == "GUC" or i == "GUA" or i == "GUG":
+        aaSequence.append("V")
+    elif i == "UCU" or i == "UCC" or i == "UCA" or i == "UCG" or i == "AGU" or i == "AGC":
+        aaSequence.append("S")
+    elif i == "CCU" or i == "CCC" or i == "CCA" or i == "CCG":
+        aaSequence.append("P")
+    elif i == "ACU" or i == "ACC" or i == "ACA" or i == "ACG":
+        aaSequence.append("T")
+    elif i == "GCU" or i == "GCC" or i == "GCA" or i == "GCG":
+        aaSequence.append("A")
+    elif i == "UAU" or i == "UAC":
+        aaSequence.append("Y")
+    elif i == "CAU" or i == "CAC":
+        aaSequence.append("H")
+    elif i == "CAA" or i == "CAG":
+        aaSequence.append("Q")
+    elif i == "AAU" or i == "AAC":
+        aaSequence.append("N")
+    elif i == "AAA" or i == "AAG":
+        aaSequence.append("K")
+    elif i == "GAU" or i == "GAC":
+        aaSequence.append("D")
+    elif i == "GAA" or i == "GAG":
+        aaSequence.append("E")
+    elif i == "UGU" or i == "UGC":
+        aaSequence.append("C")
+    elif i == "UGG":
+        aaSequence.append("W")
+    elif i == "CGU" or i == "CGC" or i == "CGA" or i == "CGG" or i == "AGA" or i == "AGG":
+        aaSequence.append("R")
+    elif i == "GGU" or i == "GGC" or i == "GGA" or i == "GGG":
+        aaSequence.append("G")
+    elif i == "AUU" or i == "AUC" or i == "AUA":
+        aaSequence.append("I")
+    else:
+        break
+print("Amino acid sequence translated from mRNA: " + "-".join(aaSequence))
+
+
