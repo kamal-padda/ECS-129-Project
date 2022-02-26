@@ -1,22 +1,9 @@
-def read(sequence):
-    flag = True
-    while flag:
-        try:
-            for c in sequence:
-                if c is not '5ACGT3':
-                    return ValueError
-                else:
-                    flag = False
-        except ValueError:
-            print("There was an error in the protein sequence, please try again. \n")
-
-    if c == '5':
-        x = sequence.index(c)
-    for i in sequence:
-        if i == '3':
-            y = sequence.index(i)
-            originalseq = (sequence[x:y + 2])
-            print(originalseq)
+def read(fastafile):
+    fastaseq = open(fastafile, 'r')
+    originalseq = ""
+    for line in fastaseq:
+        if line[0] != '>':
+            originalseq = originalseq + line.strip()
 
                 
         
