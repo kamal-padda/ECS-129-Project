@@ -2,8 +2,10 @@ def read(fastafile):
     fastaseq = open(fastafile, 'r')
     originalseq = ""
     for line in fastaseq:
-        if line[0] != '>':
+        if line[0] == '>':
             originalseq = originalseq + line.strip()
+        else:
+            originalseq = fastaseq
     orignalseq = ''.join(originalseq)
     print(originalseq)
     return originalseq
