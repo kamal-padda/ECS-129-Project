@@ -88,7 +88,7 @@ def orf(seq, comp):
 def main():
     seq = read()
     comp = complement(seq)
-    orf(comp, seq)
+    orf(seq, comp)
 
 
 if __name__ == "__main__":
