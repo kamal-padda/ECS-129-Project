@@ -29,9 +29,9 @@ def read(fastafile):
             originalseq = originalseq + line.strip()
 
 
-def complement(sequence):
+def complement(originalseq):
     # Reverses the sequence
-    backward = sequence[::-1]
+    backward = originalseq[::-1]
     complementaryseq = []
     pair = {"A": "T", "C": "G", "T": "A", "G": "C"}
     for i in range(len(backward)):
