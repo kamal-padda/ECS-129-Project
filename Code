@@ -1,29 +1,140 @@
-def read(sequence):
-    for c in sequence:
-        if c is not '5ACGT3':
-            return error
-    for c in sequence:
-        if c == '5':
-            x = sequence.index(c)
-            for i in sequence:
-                if i == '3':
-                    y = sequence.index(i)
-                    originalseq = (sequence[x:y + 2])
-                    print(originalseq)
+def read(fastafile):
+    fastaseq = open(fastafile, 'r')
+    originalseq = ""
+    for line in fastaseq:
+        if line[0] != '>':
+            originalseq = originalseq + line.strip()
+    orignalseq = ''.join(originalseq)
+    print(originalseq)
+    return originalseq
 
-def complementary(sequence):
-    read(sequence)
-    bckwrdseq = sequence[::-1]
-    for i in bckwrdseq:
-        if i == '3':
-            complementaryseq = print("5' ",end="")
-        elif i =='5':
-            complementaryseq = print(" " + "3' ")
-        elif i == 'T':
-            complementaryseq = print('A',end="")
-        elif i == 'A':
-            complementaryseq = print('T',end="")
-        elif i == 'G':
-            complementaryseq = print('C',end="")
-        elif i == 'C':
-            complementaryseq = print('G',end="")
+
+def complement(originalseq):
+    # Reverses the sequence
+    backward = originalseq[::-1]
+    complementaryseq = []
+    pair = {"A": "T", "C": "G", "T": "A", "G": "C"}
+    for i in range(len(backward)):
+        if backward[i] in pair.keys():
+            complementaryseq.append(pair[backward[i]])
+
+    complementaryseq = ''.join(complementaryseq)
+    print(complementaryseq)
+    return complementaryseq
+
+
+
+def orf(seq, comp):
+    frames = []
+    # Reading frames for the original sequence and reverse complement
+    # We assume that the length of the sequence and complement should be the same
+    # 3 possible frames for sequence and 3 possible for the reverse complement
+    for x in range(3):
+        s_frame = []
+        c_frame = []
+        for i in range(x, len(seq), 3):
+            if (i + 2) < len(seq):
+                s_frame.append([seq[i:i + 3]])
+                c_frame.append([comp[i:i + 3]])
+        frames.append(s_frame)
+        frames.append(c_frame)
+
+
+    orfList = list()
+    for frame in frames:
+        orf = False
+        gene = []
+        for codon in frame:
+            if codon == ["ATG"]:
+                orf = True
+                print("appending", codon)
+                gene.append(codon)
+            while orf:
+                gene.append(codon)
+                if codon in (["TAA"], ["TGA"], ["TAG"]):
+                    print("appending at end", codon)
+                    gene.append(codon)
+                    orfList.append(gene)
+                    gene.clear()
+                    orf = False
+    return orfList
+    print(orfList)
+
+def transcribe(gene):
+    # Transcribes gene into mRNA
+    gene = gene.upper()
+    listHolder = list(gene)
+    mRNA = []
+    for i in listHolder:
+        if i == 'T':
+            i.replace("T", "U")
+    newCode = listHolder
+    mRNA.append(newCode)
+    mrnaSequence = "".join(mRNA)
+    return mrnaSequence
+    print("mRNA transcribed from gene: " + mrnaSequence)
+
+def translate(mrnaSequence):
+    # Translate mRNA into AA sequence
+    aaSequence = []
+    codonList = [mrnaSequence[i:i+3] for i in range(0,len(mrnaSequence),3)]
+    for i in codonList:
+        if i == "AUG":
+            aaSequence.append("M")
+        elif i == "UUU" or i == "UUC":
+            aaSequence.append("F")
+        elif i == "UUA" or i == "UUG" or i == "CUU" or i == "CUC" or i == "CUA" or i == "CUG":
+            aaSequence.append("L")
+        elif i == "GUU" or i == "GUC" or i == "GUA" or i == "GUG":
+            aaSequence.append("V")
+        elif i == "UCU" or i == "UCC" or i == "UCA" or i == "UCG" or i == "AGU" or i == "AGC":
+            aaSequence.append("S")
+        elif i == "CCU" or i == "CCC" or i == "CCA" or i == "CCG":
+            aaSequence.append("P")
+        elif i == "ACU" or i == "ACC" or i == "ACA" or i == "ACG":
+            aaSequence.append("T")
+        elif i == "GCU" or i == "GCC" or i == "GCA" or i == "GCG":
+            aaSequence.append("A")
+        elif i == "UAU" or i == "UAC":
+            aaSequence.append("Y")
+        elif i == "CAU" or i == "CAC":
+            aaSequence.append("H")
+        elif i == "CAA" or i == "CAG":
+            aaSequence.append("Q")
+        elif i == "AAU" or i == "AAC":
+            aaSequence.append("N")
+        elif i == "AAA" or i == "AAG":
+            aaSequence.append("K")
+        elif i == "GAU" or i == "GAC":
+            aaSequence.append("D")
+        elif i == "GAA" or i == "GAG":
+            aaSequence.append("E")
+        elif i == "UGU" or i == "UGC":
+            aaSequence.append("C")
+        elif i == "UGG":
+            aaSequence.append("W")
+        elif i == "CGU" or i == "CGC" or i == "CGA" or i == "CGG" or i == "AGA" or i == "AGG":
+            aaSequence.append("R")
+        elif i == "GGU" or i == "GGC" or i == "GGA" or i == "GGG":
+            aaSequence.append("G")
+        elif i == "AUU" or i == "AUC" or i == "AUA":
+            aaSequence.append("I")
+        else:
+            break
+    return("".join(aaSequence))
+    print("Amino acid sequence translated from mRNA: " + "".join(aaSequence))
+
+
+
+
+def main():
+    fastafile = input()
+    seq = read(fastafile)
+    comp = complement(seq)
+    orf(seq, comp)
+    transcribe(orf(seq,comp))
+    translate(transcribe(orf(seq,comp)))
+
+if __name__ == "__main__":
+    main()
+
