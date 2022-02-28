@@ -3,7 +3,7 @@ def read(fastafile):
     originalseq = ""
     for line in fastaseq:
         if line[0] == '>':
-            originalseq = originalseq + line.strip()
+            fastaseq = fastaseq + line.strip()
         else:
             originalseq = fastaseq
     orignalseq = ''.join(originalseq)
