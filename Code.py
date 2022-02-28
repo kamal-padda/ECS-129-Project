@@ -27,6 +27,7 @@ def read(fastafile):
     for line in fastaseq:
         if line[0] != '>':
             originalseq = originalseq + line.strip()
+    return originalseq
 
 
 def complement(originalseq):
