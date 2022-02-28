@@ -27,6 +27,8 @@ def read(fastafile):
     for line in fastaseq:
         if line[0] != '>':
             originalseq = originalseq + line.strip()
+    orignalseq = ''.join(originalseq)
+    print(originalseq)
     return originalseq
 
 
