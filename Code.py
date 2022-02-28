@@ -1,3 +1,4 @@
+'''
 def read():
     flag = True
     while flag:
@@ -18,6 +19,14 @@ def read():
         if not char.isalpha():
             sequence = sequence.replace(char, '')
     return sequence
+ '''
+
+def read(fastafile):
+    fastaseq = open(fastafile, 'r')
+    originalseq = ""
+    for line in fastaseq:
+        if line[0] != '>':
+            originalseq = originalseq + line.strip()
 
 
 def complement(sequence):
