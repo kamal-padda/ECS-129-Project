@@ -56,16 +56,13 @@ def orf(seq, comp):
             if codon == "ATG" and orf == False:
                 gene.append(codon)
                 orf = True
-            elif codon == ("TAA", "TGA", "TAG") and orf == False:
+            elif codon == ("TAA", "TGA", "TAG") and orf == True:
                     gene.append(codon)
                     orf = False
             else:
                 if orf == True:
                     gene.append(codon)
-        gene = frame[start:end]
-        if gene:
-            orfList.append(gene)
-    return orfList()
+    return gene
 
 def transcribe(gene):
     # Transcribes gene into mRNA
