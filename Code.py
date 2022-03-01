@@ -1,10 +1,9 @@
-'''
 def read():
     flag = True
     while flag:
         try:
             # change to read in sequence from file
-            sequence = "5’ TCAATGTAACGCGCTACCCGGAGCTCTGGGCCCAAATTTCATCCACT 3’"
+            sequence = "5’GAGCCATGCATTATCTAGATAGTAGGCTCTGAGAATTTATCT3’"
             # Raises all the nucleotides to upper case to get rid of user input case error
             sequence = sequence.upper()
             for c in sequence:
@@ -19,8 +18,8 @@ def read():
         if not char.isalpha():
             sequence = sequence.replace(char, '')
     return sequence
- '''
 
+"""
 def read(fastafile):
     fastaseq = open(fastafile, 'r')
     originalseq = ""
@@ -30,6 +29,7 @@ def read(fastafile):
     orignalseq = ''.join(originalseq)
     print(originalseq)
     return originalseq
+"""
 
 
 def complement(originalseq):
@@ -67,7 +67,7 @@ def orf(seq, comp):
         start = 0
         end = 0
         record = False
-        for i in range(0, len(frame), 3):
+        for i in range(0, len(frame)):
             codon = frame[i:i+3]
             if codon == "ATG":
                 start = i
@@ -87,7 +87,8 @@ def orf(seq, comp):
 def main():
     seq = read()
     comp = complement(seq)
-    orf(seq, comp)
+    gene = orf(seq, comp)
+    print(gene)
 
 
 if __name__ == "__main__":
