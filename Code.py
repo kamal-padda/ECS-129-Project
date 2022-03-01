@@ -64,7 +64,6 @@ def orf(seq, comp):
     # Returns the longest gene sequence
     orfList = list()
     for frame in frames:
-        print(frame)
         gene = []
         orf = False
         for i in range(0, len(frame), 3):
@@ -78,11 +77,9 @@ def orf(seq, comp):
             else:
                 if orf:
                     gene.append(codon)
-            print(gene)
         if gene:
             orfList.append(''.join(gene))
     # returns longest gene in orfList
-    print(orfList)
     return max(orfList, key=len)
             
 
