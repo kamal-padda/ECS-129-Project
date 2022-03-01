@@ -85,6 +85,22 @@ def transcribe(gene):
     mrnaSequence = "".join(listHolder)
     return mrnaSequence
 
+def splice(mrnaSequence):
+    spliceList = []
+    splice = True
+    for x in range(2):
+        for i in range(x, len(mrnaSequence), 2):
+            if i == 'GU' and splice == True:
+                splice == False
+                spliceList = mrnaSequence.del(i)
+            elif i == 'AG' and splice == False:
+                splice == True
+                spliceList = mrnaSequence.del(i)
+            elif splice == False:
+                spliceList = mrnaSequence.del(i)
+    spliceList = "".join(spliceList)
+    return spliceList
+
 def translate(mrnaSequence):
     # Translate mRNA into AA sequence
     aaSequence = []
