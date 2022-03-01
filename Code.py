@@ -1,3 +1,4 @@
+'''
 def read():
     flag = True
     while flag:
@@ -18,11 +19,22 @@ def read():
         if not char.isalpha():
             sequence = sequence.replace(char, '')
     return sequence
+ '''
+
+def read(fastafile):
+    fastaseq = open(fastafile, 'r')
+    originalseq = ""
+    for line in fastaseq:
+        if line[0] != '>':
+            originalseq = originalseq + line.strip()
+    orignalseq = ''.join(originalseq)
+    print(originalseq)
+    return originalseq
 
 
-def complement(sequence):
+def complement(originalseq):
     # Reverses the sequence
-    backward = sequence[::-1]
+    backward = originalseq[::-1]
     complementaryseq = []
     pair = {"A": "T", "C": "G", "T": "A", "G": "C"}
     for i in range(len(backward)):
@@ -75,7 +87,7 @@ def orf(seq, comp):
 def main():
     seq = read()
     comp = complement(seq)
-    orf(comp, seq)
+    orf(seq, comp)
 
 
 if __name__ == "__main__":
