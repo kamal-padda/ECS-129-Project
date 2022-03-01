@@ -30,7 +30,6 @@ def complement(sequence):
             complementaryseq.append(pair[backward[i]])
 
     complementaryseq = ''.join(complementaryseq)
-    print(complementaryseq)
     return complementaryseq
 
 
@@ -41,36 +40,36 @@ def orf(seq, comp):
     # We assume that the length of the sequence and complement should be the same
     # 3 possible frames for sequence and 3 possible for the reverse complement
     for x in range(3):
-        s_frame = []
-        c_frame = []
+        s_frame = ""
+        c_frame = ""
         for i in range(x, len(seq), 3):
             if (i + 2) < len(seq):
-                s_frame.append([seq[i:i + 3]])
-                c_frame.append([comp[i:i + 3]])
+                s_frame += seq[i:i + 3]
+                c_frame += comp[i:i + 3]
         frames.append(s_frame)
         frames.append(c_frame)
 
-
+    # Returns the longest gene sequence
     orfList = list()
     for frame in frames:
-        orf = False
-        gene = []
-        for codon in frame:
-            if codon == ["ATG"]:
-                orf = True
-                print("appending", codon)
-                gene.append(codon)
-            while orf:
-                gene.append(codon)
-                if codon in (["TAA"], ["TGA"], ["TAG"]):
-                    print("appending at end", codon)
-                    gene.append(codon)
-                    orfList.append(gene)
-                    gene.clear()
-                    orf = False
-
-    print(orfList)
-
+        start = 0
+        end = 0
+        record = False
+        for i in range(0, len(frame), 3):
+            codon = frame[i:i+3]
+            if codon == "ATG":
+                start = i
+                record = True
+            elif codon =="TAA" or codon == "TGA" or codon == "TAG":
+                if record:
+                    end = i + 3
+        gene = frame[start:end]
+        if gene:
+            orfList.append(gene)
+    for i in range(1, len(orfList)):
+        if len(orfList[i]) >= len(orfList[i-1]):
+            gene = orfList[i]
+    return gene
 
 
 def main():
