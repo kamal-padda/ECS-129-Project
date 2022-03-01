@@ -3,7 +3,7 @@ def read():
     while flag:
         try:
             # change to read in sequence from file
-            sequence = "5’GAGCCATGCATTATCTAGATAGTAGGCTCTGAGAATTTATCT3’"
+            sequence = "5’TATAAAGAGCCATGCATGAACTGGATAAAAGGCTCTGAGAATTTATCTCTAG’"
             # Raises all the nucleotides to upper case to get rid of user input case error
             sequence = sequence.upper()
             for c in sequence:
@@ -78,7 +78,8 @@ def orf(seq, comp):
                 if orf:
                     gene.append(codon)
         if gene:
-            orfList.append(''.join(gene))
+            if gene[0] == "ATG" and gene[-1] in ("TAA", "TGA", "TAG"):
+                orfList.append(''.join(gene))
     # returns longest gene in orfList
     return max(orfList, key=len)
             
