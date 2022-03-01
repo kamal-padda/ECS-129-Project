@@ -11,7 +11,7 @@ def read(textfile):
             # Raises all the nucleotides to upper case to get rid of user input case error
             originalseq = originalseq.upper()
             for c in originalseq:
-                if c not in "5’ACGT3' ":
+                if c not in "5'ACGT3' ":
                     raise ValueError
                 else:
                     flag = False
@@ -37,32 +37,42 @@ def complement(originalseq):
     print("Complementary sequence: " + complementaryseq)
     return complementaryseq
 
-def orf(gene):
+def orf(seq, comp):
     frames = []
     # Reading frames for the original sequence and reverse complement
     # We assume that the length of the sequence and complement should be the same
     # 3 possible frames for sequence and 3 possible for the reverse complement
     for x in range(3):
-        for i in gene and in range(x, len(gene), 3):
-            if (i + 2) < len(gene):
-                frames = gene[i:i + 3]
+        s_frame = ""
+        c_frame = ""
+        for i in range(x, len(seq), 3):
+            if (i + 2) < len(seq):
+                s_frame += seq[i:i + 3]
+                c_frame += comp[i:i + 3]
+        frames.append(s_frame)
+        frames.append(c_frame)
 
     # Returns the longest gene sequence
     orfList = list()
     for frame in frames:
         gene = []
         orf = False
-        for codon in frame:
-            if codon == "ATG" and orf == False:
+        for i in range(0, len(frame), 3):
+            codon = frame[i:i+3]
+            if codon == "ATG" and not orf:
                 gene.append(codon)
                 orf = True
-            elif codon == ("TAA", "TGA", "TAG") and orf == True:
-                    gene.append(codon)
-                    orf = False
+            elif codon in ("TAA", "TGA", "TAG") and orf:
+                gene.append(codon)
+                orf = False
             else:
-                if orf == True:
+                if orf:
                     gene.append(codon)
-    return gene
+        if gene:
+            if gene[0] == "ATG" and gene[-1] in ("TAA", "TGA", "TAG"):
+                orfList.append(''.join(gene))
+    # returns longest gene in orfList
+    return max(orfList, key=len)
 
 def transcribe(gene):
     # Transcribes gene into mRNA
@@ -129,15 +139,10 @@ def main():
     textfile = input("Enter text file name: ")
     seq = read(textfile)
     comp = complement(seq)
-    gene1 = orf(seq)
-    gene2 = orf(comp)
-    if len(gene1) > len(gene2):
-        gene = gene1
-    else:
-        gene = gene2
-    print("Longest ORF gene sequence: "+gene)
-    print("mRNA transcribed from gene: " + transcribe(orf(seq,comp)))
-    translate(transcribe(orf(seq,comp)))
+    openRF = orf(seq,comp)
+    print("Longest ORF gene sequence: "+openRF)
+    print("mRNA transcribed from gene: " + transcribe(openRF))
+    translate(transcribe(openRF))
 
 if __name__ == "__main__":
     main()
