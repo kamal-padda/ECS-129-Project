@@ -1,15 +1,28 @@
-def read(fastafile):
-    fastaseq = open(fastafile, 'r')
-    originalseq = ""
-    for line in fastaseq:
-        if line[0] == '>':
-            fastaseq = fastaseq + line.strip()
-        else:
-            originalseq = fastaseq
-    orignalseq = ''.join(originalseq)
-    print(originalseq)
-    return originalseq
+def read(textfile):
+    flag = True
+    while flag:
+        try:
+            # change to read in sequence from file
+            textseq = open(textfile, 'r').readlines()
+            originalseq = ""
+            for line in textseq:
+                originalseq = textseq
+            originalseq = ''.join(originalseq)
+            # Raises all the nucleotides to upper case to get rid of user input case error
+            originalseq = originalseq.upper()
+            for c in originalseq:
+                if c not in "5’ACGT3' ":
+                    raise ValueError
+                else:
+                    flag = False
+        except ValueError:
+            print("There was an error in the protein sequence, please try again. \n")
 
+    for char in originalseq:
+        if not char.isalpha():
+            originalseq = originalseq.replace(char, '')
+    print("Original sequence: "+originalseq)
+    return(originalseq)
 
 def complement(originalseq):
     # Reverses the sequence
@@ -21,10 +34,8 @@ def complement(originalseq):
             complementaryseq.append(pair[backward[i]])
 
     complementaryseq = ''.join(complementaryseq)
-    print(complementaryseq)
+    print("Complementary sequence: " + complementaryseq)
     return complementaryseq
-
-
 
 def orf(seq, comp):
     frames = []
@@ -32,49 +43,49 @@ def orf(seq, comp):
     # We assume that the length of the sequence and complement should be the same
     # 3 possible frames for sequence and 3 possible for the reverse complement
     for x in range(3):
-        s_frame = []
-        c_frame = []
+        s_frame = ""
+        c_frame = ""
         for i in range(x, len(seq), 3):
             if (i + 2) < len(seq):
-                s_frame.append([seq[i:i + 3]])
-                c_frame.append([comp[i:i + 3]])
+                s_frame += seq[i:i + 3]
+                c_frame += comp[i:i + 3]
         frames.append(s_frame)
         frames.append(c_frame)
 
-
+    # Returns the longest gene sequence
     orfList = list()
     for frame in frames:
-        orf = False
-        gene = []
-        for codon in frame:
-            if codon == ["ATG"]:
-                orf = True
-                print("appending", codon)
-                gene.append(codon)
-            while orf:
-                gene.append(codon)
-                if codon in (["TAA"], ["TGA"], ["TAG"]):
-                    print("appending at end", codon)
-                    gene.append(codon)
-                    orfList.append(gene)
-                    gene.clear()
-                    orf = False
-    return orfList
-    print(orfList)
+        start = 0
+        end = 0
+        record = False
+        for i in range(0, len(frame), 3):
+            codon = frame[i:i+3]
+            if codon == "ATG":
+                start = i
+                record = True
+            elif codon =="TAA" or codon == "TGA" or codon == "TAG":
+                if record:
+                    end = i + 3
+        gene = frame[start:end]
+        if gene:
+            orfList.append(gene)
+    for i in range(1, len(orfList)):
+        if len(orfList[i]) >= len(orfList[i-1]):
+            gene = orfList[i]
+    print("Longest ORF gene sequence: "+gene)
+    return gene
 
 def transcribe(gene):
     # Transcribes gene into mRNA
+    gene = str(gene)
     gene = gene.upper()
     listHolder = list(gene)
-    mRNA = []
-    for i in listHolder:
-        if i == 'T':
-            i.replace("T", "U")
-    newCode = listHolder
-    mRNA.append(newCode)
-    mrnaSequence = "".join(mRNA)
-    return mrnaSequence
+    for i in range(len(listHolder)):
+        if listHolder[i] == 'T':
+            listHolder[i] = 'U'
+    mrnaSequence = "".join(listHolder)
     print("mRNA transcribed from gene: " + mrnaSequence)
+    return mrnaSequence
 
 def translate(mrnaSequence):
     # Translate mRNA into AA sequence
@@ -123,20 +134,18 @@ def translate(mrnaSequence):
             aaSequence.append("I")
         else:
             break
-    return("".join(aaSequence))
     print("Amino acid sequence translated from mRNA: " + "".join(aaSequence))
-
-
-
+    return("".join(aaSequence))
 
 def main():
-    fastafile = input()
-    seq = read(fastafile)
+    textfile = input("Enter text file name: ")
+    seq = read(textfile)
     comp = complement(seq)
-    orf(seq, comp)
+    orf(seq,comp)
     transcribe(orf(seq,comp))
     translate(transcribe(orf(seq,comp)))
 
 if __name__ == "__main__":
     main()
+
 
