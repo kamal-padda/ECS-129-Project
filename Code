@@ -72,7 +72,6 @@ def orf(seq, comp):
     for i in range(1, len(orfList)):
         if len(orfList[i]) >= len(orfList[i-1]):
             gene = orfList[i]
-    print("Longest ORF gene sequence: "+gene)
     return gene
 
 def transcribe(gene):
@@ -84,7 +83,6 @@ def transcribe(gene):
         if listHolder[i] == 'T':
             listHolder[i] = 'U'
     mrnaSequence = "".join(listHolder)
-    print("mRNA transcribed from gene: " + mrnaSequence)
     return mrnaSequence
 
 def translate(mrnaSequence):
@@ -141,8 +139,9 @@ def main():
     textfile = input("Enter text file name: ")
     seq = read(textfile)
     comp = complement(seq)
-    orf(seq,comp)
-    transcribe(orf(seq,comp))
+    openRF = orf(seq,comp)
+    print("Longest ORF gene sequence: "+openRF)
+    print("mRNA transcribed from gene: " + transcribe(orf(seq,comp)))
     translate(transcribe(orf(seq,comp)))
 
 if __name__ == "__main__":
