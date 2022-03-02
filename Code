@@ -95,13 +95,14 @@ def splice(mrnaSequence):
             pair = mrnaSequence[i:i + 1]
             if pair == 'GU' and splice == True:
                 splice == False
-                spliceList = mrnaSequence.remove(pair)
+                mrnaSequence.remove(pair)
             elif pair == 'AG' and splice == False:
                 splice == True
-                spliceList = mrnaSequence.remove(pair)
+                mrnaSequence.remove(pair)
             elif splice == False:
-                spliceList = mrnaSequence.remove(i)
-    spliceList = "".join(spliceList)
+                mrnaSequence.remove(i)
+    
+    spliceList = "".join(mrnaSequence)
     return spliceList
 
 def translate(mrnaSequence):
