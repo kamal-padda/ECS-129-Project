@@ -138,13 +138,15 @@ def translate(mrnaSequence):
     return("".join(aaSequence))
 
 
+
+
 def main():
     seq = read()
     comp = complement(seq)
     openRF = orf(seq,comp)
     mRNA = transcribe(openRF)
     amino = translate(mRNA)
-
+    
     print("Original sequence:", seq)
     print("Complementary sequence:", comp)
     print("Longest ORF gene sequence:", openRF)
