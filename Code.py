@@ -3,7 +3,6 @@ def read():
     textfile = input("Enter text file name: ")
     textseq = open(textfile, 'r').readlines()
     originalseq = ""
-    errorChar = dict()
 
     # Stores capitalized sequence in new string
     for line in textseq:
