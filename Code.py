@@ -138,8 +138,6 @@ def translate(mrnaSequence):
     return("".join(aaSequence))
 
 
-
-
 def main():
     seq = read()
     comp = complement(seq)
