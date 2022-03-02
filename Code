@@ -86,18 +86,21 @@ def transcribe(gene):
     return mrnaSequence
 
 def splice(mrnaSequence):
-    spliceList = ""
-    splice = True
+    spliceList = []    # Create a List that would contain the final splice mRNA sequence
+    pair = []
+    splice = True      # Will be set to False once splicing has been started, but not yet completed
+    # Will iterate through twice, for each reading Frame that could contain a splice site
     for x in range(2):
         for i in range(x, len(mrnaSequence), 2):
-            if i == 'GU' and splice == True:
+            pair = mrnaSequence[i:i + 1]
+            if pair == 'GU' and splice == True:
                 splice == False
-                mrnaSequence.del(i)
-            elif i == 'AG' and splice == False:
+                spliceList = mrnaSequence.remove(pair)
+            elif pair == 'AG' and splice == False:
                 splice == True
-                mrnaSequence.del(i)
+                spliceList = mrnaSequence.remove(pair)
             elif splice == False:
-                mrnaSequence.del(i)
+                spliceList = mrnaSequence.remove(i)
     spliceList = "".join(spliceList)
     return spliceList
 
