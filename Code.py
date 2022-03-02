@@ -9,17 +9,12 @@ def read():
     for line in textseq:
         originalseq = line.upper()
 
-    # Checks to see if there are errors in the string
+    # Checks to see if there are errors in the string and deletes them
     for c in originalseq:
-        if c not in "5'ACGT3' " or not c.isalpha():
+        if c not in "5'ACGT3'" or not c.isalpha():
             originalseq = originalseq.replace(c, '')
-            for key in errorChar:
-                errorChar[key] = originalseq.index(c)
-
-    if errorChar:
-        print("The following charaacters that didn't correspond to nucleotides were found:", errorChar)
-    # Prints and returns the formatted sequence
-    print("Original sequence: " + originalseq)
+            
+    # Returns the formatted sequence
     return originalseq
 
 
@@ -33,7 +28,6 @@ def complement(originalseq):
             complementaryseq.append(pair[backward[i]])
 
     complementaryseq = ''.join(complementaryseq)
-    print("Complementary sequence: " + complementaryseq)
     return complementaryseq
 
 
@@ -134,7 +128,6 @@ def translate(mrnaSequence):
             aaSequence.append("I")
         else:
             break
-    print("Amino acid sequence translated from mRNA: " + "".join(aaSequence))
     return("".join(aaSequence))
 
 
@@ -142,9 +135,14 @@ def main():
     seq = read()
     comp = complement(seq)
     openRF = orf(seq,comp)
-    print("Longest ORF gene sequence: "+openRF)
-    print("mRNA transcribed from gene: " + transcribe(openRF))
-    translate(transcribe(openRF))
+    mRNA = transcribe(openRF)
+    amino = translate(mRNA)
+
+    print("Original sequence:", seq)
+    print("Complementary sequence:", comp)
+    print("Longest ORF gene sequence:", openRF)
+    print("mRNA transcribed from gene:", mRNA)
+    print("Amino acid sequence translated from mRNA: Nter", amino, "Cter")
 
 
 if __name__ == "__main__":
