@@ -3,16 +3,24 @@ def read():
     textfile = input("Enter text file name: ")
     textseq = open(textfile, 'r').readlines()
     originalseq = ""
-
+    errorChar = []
+   
     # Stores capitalized sequence in new string
     for line in textseq:
         originalseq = line.upper()
 
-    # Checks to see if there are errors in the string and deletes them
+    # Checks to see if there are errors in the string and deletes
     for c in originalseq:
-        if c not in "5'ACGT3'" or not c.isalpha():
+        if c not in "5'ACGT3’ " or not c.isalpha():
             originalseq = originalseq.replace(c, '')
-            
+            if c not in "53'’ ":
+                errorChar.append(c)
+
+    # Prints out the list of error characters, if any:
+    if errorChar:
+        print("The following errors were found and removed in the sequence:")
+        print(errorChar)
+
     # Returns the formatted sequence
     return originalseq
 
