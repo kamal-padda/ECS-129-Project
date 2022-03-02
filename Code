@@ -86,23 +86,24 @@ def transcribe(gene):
     return mrnaSequence
 
 def splice(mrnaSequence):
-    spliceList = []    # Create a List that would contain the final splice mRNA sequence
-    pair = []
-    splice = True      # Will be set to False once splicing has been started, but not yet completed
+    spliceList = ""    # Create a List that would contain the final splice mRNA sequence
+    pair = []      # Will be set to False once splicing has been started, but not yet completed
     # Will iterate through twice, for each reading Frame that could contain a splice site
     for x in range(2):
+        splice = True
         for i in range(x, len(mrnaSequence), 2):
-            pair = mrnaSequence[i:i + 1]
+            pair = mrnaSequence[i:i + 2]
             if pair == 'GU' and splice == True:
                 splice == False
-                mrnaSequence.remove(pair)
+                mrnaSequence = mrnaSequence.replace(pair, '')
             elif pair == 'AG' and splice == False:
                 splice == True
-                mrnaSequence.remove(pair)
+                break
+                mrnaSequence = mrnaSequence.replace(pair, '')
             elif splice == False:
-                mrnaSequence.remove(i)
-    
+                mrnaSequence = mrnaSequence.replace(pair, '')
     spliceList = "".join(mrnaSequence)
+    print("mRNA sequence after splicing:" + spliceList)
     return spliceList
 
 def translate(mrnaSequence):
@@ -162,6 +163,7 @@ def main():
     openRF = orf(seq,comp)
     print("Longest ORF gene sequence: "+openRF)
     print("mRNA transcribed from gene: " + transcribe(openRF))
+    splice(transcribe(openRF))
     translate(transcribe(openRF))
 
 if __name__ == "__main__":
