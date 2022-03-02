@@ -100,7 +100,7 @@ def splice(mrnaSequence):
                 splice == True
                 break
                 mrnaSequence = mrnaSequence.replace(pair, '')
-            elif splice == False:
+            else splice == False:
                 mrnaSequence = mrnaSequence.replace(pair, '')
     spliceList = "".join(mrnaSequence)
     print("mRNA sequence after splicing:" + spliceList)
