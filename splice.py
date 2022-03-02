@@ -1,7 +1,7 @@
 def splice(mrnaSequence):
     final_seq = ""
     splice_seq = ""
-    pair = []      # Will be set to False once splicing has been started, but not yet completed
+    pair = ""
     # Will iterate through twice, for each reading Frame that could contain a splice site
     for x in range(2):
         splice = False
