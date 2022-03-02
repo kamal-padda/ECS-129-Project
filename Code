@@ -1,28 +1,29 @@
-def read(textfile):
-    flag = True
-    while flag:
-        try:
-            # change to read in sequence from file
-            textseq = open(textfile, 'r').readlines()
-            originalseq = ""
-            for line in textseq:
-                originalseq = textseq
-            originalseq = ''.join(originalseq)
-            # Raises all the nucleotides to upper case to get rid of user input case error
-            originalseq = originalseq.upper()
-            for c in originalseq:
-                if c not in "5'ACGT3' ":
-                    raise ValueError
-                else:
-                    flag = False
-        except ValueError:
-            print("There was an error in the protein sequence, please try again. \n")
+def read():
+    # Reads in text file name from user
+    textfile = input("Enter text file name: ")
+    textseq = open(textfile, 'r').readlines()
+    originalseq = ""
+    errorChar = []
+   
+    # Stores capitalized sequence in new string
+    for line in textseq:
+        originalseq = line.upper()
 
-    for char in originalseq:
-        if not char.isalpha():
-            originalseq = originalseq.replace(char, '')
-    print("Original sequence: "+originalseq)
-    return(originalseq)
+    # Checks to see if there are errors in the string and deletes
+    for c in originalseq:
+        if c not in "5'ACGT3’ " or not c.isalpha():
+            originalseq = originalseq.replace(c, '')
+            if c not in "53'’ ":
+                errorChar.append(c)
+
+    # Prints out the list of error characters, if any:
+    if errorChar:
+        print("The following errors were found and removed in the sequence:")
+        print(errorChar)
+
+    # Returns the formatted sequence
+    return originalseq
+
 
 def complement(originalseq):
     # Reverses the sequence
@@ -34,8 +35,8 @@ def complement(originalseq):
             complementaryseq.append(pair[backward[i]])
 
     complementaryseq = ''.join(complementaryseq)
-    print("Complementary sequence: " + complementaryseq)
     return complementaryseq
+
 
 def orf(seq, comp):
     frames = []
@@ -74,6 +75,7 @@ def orf(seq, comp):
     # returns longest gene in orfList
     return max(orfList, key=len)
 
+
 def transcribe(gene):
     # Transcribes gene into mRNA
     gene = str(gene)
@@ -85,26 +87,6 @@ def transcribe(gene):
     mrnaSequence = "".join(listHolder)
     return mrnaSequence
 
-def splice(mrnaSequence):
-    spliceList = ""    # Create a List that would contain the final splice mRNA sequence
-    pair = []      # Will be set to False once splicing has been started, but not yet completed
-    # Will iterate through twice, for each reading Frame that could contain a splice site
-    for x in range(2):
-        splice = True
-        for i in range(x, len(mrnaSequence), 2):
-            pair = mrnaSequence[i:i + 2]
-            if pair == 'GU' and splice == True:
-                splice == False
-                mrnaSequence = mrnaSequence.replace(pair, '')
-            elif pair == 'AG' and splice == False:
-                splice == True
-                break
-                mrnaSequence = mrnaSequence.replace(pair, '')
-            else splice == False:
-                mrnaSequence = mrnaSequence.replace(pair, '')
-    spliceList = "".join(mrnaSequence)
-    print("mRNA sequence after splicing:" + spliceList)
-    return spliceList
 
 def translate(mrnaSequence):
     # Translate mRNA into AA sequence
@@ -153,18 +135,22 @@ def translate(mrnaSequence):
             aaSequence.append("I")
         else:
             break
-    print("Amino acid sequence translated from mRNA: " + "".join(aaSequence))
     return("".join(aaSequence))
 
+
 def main():
-    textfile = input("Enter text file name: ")
-    seq = read(textfile)
+    seq = read()
     comp = complement(seq)
     openRF = orf(seq,comp)
-    print("Longest ORF gene sequence: "+openRF)
-    print("mRNA transcribed from gene: " + transcribe(openRF))
-    splice(transcribe(openRF))
-    translate(transcribe(openRF))
+    mRNA = transcribe(openRF)
+    amino = translate(mRNA)
+
+    print("Original sequence:", seq)
+    print("Complementary sequence:", comp)
+    print("Longest ORF gene sequence:", openRF)
+    print("mRNA transcribed from gene:", mRNA)
+    print("Amino acid sequence translated from mRNA: Nter", amino, "Cter")
+
 
 if __name__ == "__main__":
     main()
